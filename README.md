@@ -2,45 +2,51 @@
 
 Formigueiro is a framework for transforming user provided constructive heuristics into Ant Colony Optimization (ACO) algorithms.
 
-## Combinatorial Optimization
+## A Quick Introduction to Ant Colony Optimization
+
+### Combinatorial Optimization
 In Combinatorial Optimization problems, possible (or feasible) solutions are made up of components. Combinations of components that satisfy the problem constraints (that "make sense" as solutions) are feasible solutions.
 Finding optimal solutions, feasible combinations of components that minimize an objective function, is often hard.
 
 
-## Constructive Heuristics
+### Constructive Heuristics
 Constructive heuristics build solutions by iteratively adding components to an initially empty set. At each step, they employ some criterium to select one from a set of components whose selection can potentially lead to a feasible solution.
 
-## Ant Colony Optimization
-In nature, ants cooperate at finding resources by depositing pheromone along their paths. Ant Colony Optimization is metaheuristic inspired by this behavior.
+### Ant Colony Optimization
+In nature, ants cooperate at finding resources by depositing pheromone along their traveled paths. Ant Colony Optimization is metaheuristic inspired by this behavior.
 
 Ants are responsible for applying a constructive algorithm to build solutions. After the solution is built, they might deposit pheromone over the components they employed. The amount of pheromone depends on the quality of the solution they found.
 
-During the construction phase, the next component to be added to the solution is selected probabilistically. The probability p<sub>c</sub> for the selection of a component c takes into account the amount of pheromone &tau;<sub>c</sub> deposited on that component by all the ants as well as a measure &eta;<sub>c</sub> of the cost of employing that component on a solution:
+During the construction phase, the next component to be added to the solution is selected probabilistically. The probability p<sub>c</sub> for the selection of a component c takes into account the amount of pheromone &tau;<sub>c</sub> deposited on that component by all the ants as well as a measure &eta;<sub>c</sub> of the cost of employing that component on a solution. 
 
-p<sub>c</sub> = &tau;<sub>c</sub><sup>&alpha;</sup>&eta;<sub>c</sub><sup>&beta;</sup>/&Sigma;<sub>c'</sub>&tau;<sub>c'</sub><sup>&alpha;</sup>&eta;<sub>c'</sub><sup>&beta;</sup>
+Let C be the set of components available to be selected at the current iteration. Let A be the set of ants.
+In Ant System, one of the most basic ACO variations, the following formula for the probability of selecting component c is used:
+
+p<sub>c</sub> = &tau;<sub>c</sub><sup>&alpha;</sup>&eta;<sub>c</sub><sup>&beta;</sup>/&Sigma;<sub>c'&isin;C</sub>&tau;<sub>c'</sub><sup>&alpha;</sup>&eta;<sub>c'</sub><sup>&beta;</sup>
 
 After the construction and an optional local search phase, pheromones are then updated:
 
 &tau;<sub>c</sub> &larr; (1-&rho;)&tau;<sub>c</sub> + &Sigma;<sub>a&isin;A</sub>&Delta;&tau;<sub>c</sub><sup>a</sup>, 
 
-where &Delta;&tau;<sub>c</sub><sup>a</sup> = Q/f(s<sub>a</sub>) if c is used by ant a, &Delta;&tau;<sub>c</sub><sup>a</sup> = 0 otherwise.
+where &Delta;&tau;<sub>c</sub><sup>a</sup> = Q/f(a) if c is used by ant a, &Delta;&tau;<sub>c</sub><sup>a</sup> = 0 otherwise, and f(a) is the objective value of the solution built by ant a.
 
-### Main Variations
+&alpha;, &beta;, &rho;, and Q are algorithm parameters.
 
-#### Ant System
+#### Main Variations
+
+##### Ant System
 Explained above.
 
-#### Max-Min Ant System
+##### Max-Min Ant System
 * Pheromone values are updated only by global or iteration best ants.
 * There are upper and lower limits on the amount of pheromone of each component.
 
-#### Ant Colony System
+##### Ant Colony System
 * Pheromone values are updated only by global or iteration best ants.
 * Local pheromone updates: Ants update component pheromones as soon as they are selected:
- 
-&tau;<sub>c</sub> &larr; (1-&phi;)&tau;<sub>c</sub> + &phi;&tau;<sub>0</sub>
+&tau;<sub>c</sub> &larr; (1-&phi;)&tau;<sub>c</sub> + &phi;&tau;<sub>0</sub>. The initial amount of pheromone on each component is &tau;<sub>0</sub> and &phi; is an algorithm parameter.
 
-* Pseudorandom proportional rule: In order to select the next component, an ant draws a random number q &isin; [0, 1]. If q &le; q<sub>0</sub>, the next component will be the one that maximizes &tau;<sub>c</sub>&eta;<sub>c</sub><sup>&beta;</sup>. Else, the classic rule is applyied.
+* Pseudorandom proportional rule: In order to select the next component, an ant draws a random number q &isin; [0, 1]. If q &le; q<sub>0</sub>, where q<sub>0</sub> is an algorithm parameter, the next component will be the one that maximizes &tau;<sub>c</sub>&eta;<sub>c</sub><sup>&beta;</sup>. Else, the classic rule is applyied.
 
 ## How to Use the Framework
 
@@ -162,3 +168,24 @@ if __name__ == '__main__':
     instance = TSPInstance(50)
     obj, components = Formigueiro.Solve(antCls = TSPAnt, instance = instance, numIterations = 1000, numAnts = 10, alpha = 1, beta = 1) 
 ```
+
+The following are the parameters that can be passed to `Solve`:
+
+Name | Meaning | Default
+-----|---------|--------
+alpha | &alpha; | 1
+beta |&beta;| 1
+rho |&rho;| 0.1
+Q   |Q| 1
+tau0 |&tau;<sub>0</sub>| 1
+q0 |q<sub>0</sub>| 0.5
+phi |&phi;| 0.9
+minPheromone |min. amount of pheromone in MMAS| -&#x221e;
+maxPheromone |max. amount of pheromone in MMAS| &#x221e;
+
+numAnts = 10
+numIterations = 100
+
+
+## Support for Local Search
+Local Search is supported. The user must implement the method `localSearch` in its class. In addition, the `getSolutionComponents` method must be implemented. It should return an iterable with the components in the solution after local search.
