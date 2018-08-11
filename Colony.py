@@ -21,4 +21,4 @@ def Solve(antCls, numIterations = dp.numIterations, numAnts = dp.numAnts, **kwar
             ant.setGlobalBest(globalBest)
             ant.updatePheromones()
 
-    print(globalBest.sol)
+    return globalBest.getSolutionValue(), list(globalBest.getSolutionComponents())

@@ -32,13 +32,11 @@ class Decision(abc.ABC):
 class DecisionComponentRecording(Decision):
     def __init__(self, **kwargs):
         self.components = set()
-        self.solutionValue = 0
 
         super().__init__(**kwargs)
 
     def addSolutionComponent(self, component):
         self.components.add(component)
-        self.solutionValue += self.getComponentCost(component)
 
     def getSolutionComponents(self):
         return (c for c in self.components)
@@ -56,7 +54,7 @@ class DecisionComponentRecording(Decision):
                 return c
 
     def getSolutionValue(self):
-        return self.solutionValue
+        return sum(self.getComponentCost(c) for c in self.getSolutionComponents())
 
     def getHeuristicValue(self, component):
         return 1/self.getComponentCost(component)
