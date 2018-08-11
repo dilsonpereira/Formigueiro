@@ -10,7 +10,7 @@ Finding optimal solutions, feasible combinations of components that minimize an 
 
 
 ### Constructive Heuristics
-Constructive heuristics build solutions by iteratively adding components to an initially empty set. At each step, they employ some criterium to select one from a set of components whose selection can potentially lead to a feasible solution.
+Constructive heuristics build solutions by iteratively adding components to an initially empty set. At each step, they employ some criterion to select one from a set of components whose selection can potentially lead to a feasible solution.
 
 ### Ant Colony Optimization
 In nature, ants cooperate at finding resources by depositing pheromone along their traveled paths. Ant Colony Optimization is metaheuristic inspired by this behavior.
@@ -46,11 +46,11 @@ Explained above.
 * Local pheromone updates: Ants update component pheromones as soon as they are selected:
 &tau;<sub>c</sub> &larr; (1-&phi;)&tau;<sub>c</sub> + &phi;&tau;<sub>0</sub>. The initial amount of pheromone on each component is &tau;<sub>0</sub> and &phi; is an algorithm parameter.
 
-* Pseudorandom proportional rule: In order to select the next component, an ant draws a random number q &isin; [0, 1]. If q &le; q<sub>0</sub>, where q<sub>0</sub> is an algorithm parameter, the next component will be the one that maximizes &tau;<sub>c</sub>&eta;<sub>c</sub><sup>&beta;</sup>. Else, the classic rule is applyied.
+* Pseudorandom proportional rule: In order to select the next component, an ant draws a random number q &isin; [0, 1]. If q &le; q<sub>0</sub>, where q<sub>0</sub> is an algorithm parameter, the next component will be the one that maximizes &tau;<sub>c</sub>&eta;<sub>c</sub><sup>&beta;</sup>. Else, the classic rule is applied.
 
 ## How to Use the Framework
 
-In short, you implement a constructive heuristic and every time a component has to be chosen, you call a special method to take the decision for you, passing the possible choices as an argument.
+In short, we implement a constructive heuristic and every time a component has to be chosen we call a special method to take the decision for us, passing the possible choices as an argument.
 
 As an example, lets consider the Traveling Salesman Problem (TSP).
 
@@ -69,15 +69,15 @@ class TSPInstance():
     def getWeight(self, u, v):
         return ((self.xcoord[u]-self.xcoord[v])**2 + (self.ycoord[u]-self.ycoord[v])**2)**(1/2)
 ```
-In the above implementation, vertices are randomly chosen points in a 100x100 plane. Edge weitghs are the Euclidean distances between the vertices.
+In the above implementation, vertices are randomly chosen points in a 100x100 plane. Edge weights are the Euclidean distances between the vertices.
 
-To use the framework, will have to subclass an ant class correponing to your desired ACO variation:
+To use the framework, we have to subclass an ant class corresponding to our desired ACO variation:
 
-* `AS_Ant` for Ant Sytem.
+* `AS_Ant` for Ant System.
 * `ACS_Ant` for Ant Colony System.
 *  `MMAS_Ant` for Min-Max Ant System
 
-In addition, in the constructor of your class, in addition to your parameters, you **must** receive a dictionary of keyword parameters of the form `**kwargs` and make a call to `super().__init__(**kwargs)`
+In addition, in the constructor of our class, in addition to our parameters, we **must** receive a dictionary of keyword parameters of the form `**kwargs` and make a call to `super().__init__(**kwargs)`
 
 ```python
 class TSPAnt(Formigueiro.ACS_Ant):
@@ -87,9 +87,9 @@ class TSPAnt(Formigueiro.ACS_Ant):
         super().__init__(**kwargs)
 ```
 
-In the example above, we sublass `ACS_Ant` and the constructor of our subclass receives the problem instance.
+In the example above, we subclass `ACS_Ant` and the constructor of our subclass receives the problem instance.
 
-We will now implement the method responsible for building soluitons, the constructive heuristic. In our implementation, components will be tuples of the form `(u, v)`, representing edges. In Formigueiro, **every component must be hashable**. Everytime a component has to be selected, we must call `makeDecision`, passing an iterable with the possible choices. `makeDecision` will return the selected component.
+We will now implement the method responsible for building solutions, the constructive heuristic. In our implementation, components will be tuples of the form `(u, v)`, representing edges. In Formigueiro, **every component must be hashable**. Every time a component has to be selected, we must call `makeDecision`, passing an iterable with the possible choices. `makeDecision` will return the selected component.
 
 ```python
     def constructSolution(self):
