@@ -28,7 +28,7 @@ class Pheromone(abc.ABC):
 
 class PheromoneDict(Pheromone):
     def __init__(self, **kwargs):
-        self.P = collections.defaultdict(self.getCurrentTau())
+        self.P = collections.defaultdict(self.getCurrentTau)
         self.P['currentTau'] = self.getTau0()
 
         super().__init__(**kwargs)

@@ -5,59 +5,59 @@ from .Update import *
 from . import DefaultParameters as dp
 
 class Ant(abc.ABC):
-    @abc.abstractmethod
-    def getPheromoneValue(self, component):
-        pass
+    #@abc.abstractmethod
+    #def getPheromoneValue(self, component):
+    #    pass
     
-    @abc.abstractmethod
-    def setPheromoneValue(self, component, value):
-        pass
+    #@abc.abstractmethod
+    #def setPheromoneValue(self, component, value):
+    #    pass
 
-    @abc.abstractmethod
-    def getHeuristicValue(self, component):
-        pass
+    #@abc.abstractmethod
+    #def getHeuristicValue(self, component):
+    #    pass
 
-    @abc.abstractmethod
-    def getComponentCost(self, component):
-        pass
+    #@abc.abstractmethod
+    #def getComponentCost(self, component):
+    #    pass
 
-    @abc.abstractmethod
-    def getAlpha(self):
-        pass
+    #@abc.abstractmethod
+    #def getAlpha(self):
+    #    pass
 
-    @abc.abstractmethod
-    def getBeta(self):
-        pass
+    #@abc.abstractmethod
+    #def getBeta(self):
+    #    pass
 
-    @abc.abstractmethod
-    def getRho(self):
-        pass
+    #@abc.abstractmethod
+    #def getRho(self):
+    #    pass
 
-    @abc.abstractmethod
-    def getQ(self):
-        pass
+    #@abc.abstractmethod
+    #def getQ(self):
+    #    pass
 
-    @abc.abstractmethod
-    def getTau0(self):
-        pass
+    #@abc.abstractmethod
+    #def getTau0(self):
+    #    pass
 
-    @abc.abstractmethod
-    def makeDecision(self, components):
-        pass
+    #@abc.abstractmethod
+    #def makeDecision(self, components):
+    #    pass
     
     @abc.abstractmethod
     def constructSolution(self):
         pass
 
-    @abc.abstractmethod
-    def updatePheromones(self):
-        pass
+    #@abc.abstractmethod
+    #def updatePheromones(self):
+    #    pass
 
-    @abc.abstractmethod
-    def canUpdatePheromones(self):
-        pass
+    #@abc.abstractmethod
+    #def canUpdatePheromones(self):
+    #    pass
 
-    @abc.abstractmethod
+    #@abc.abstractmethod
     def localSearch(self):
         pass
 
@@ -77,33 +77,33 @@ class Ant(abc.ABC):
     def getIterBest(self):
         pass
 
-    @abc.abstractmethod
-    def getSolutionValue(self):
-        pass
+    #@abc.abstractmethod
+    #def getSolutionValue(self):
+    #    pass
 
-    @abc.abstractmethod
-    def getSolutionComponents(self):
-        pass
+    #@abc.abstractmethod
+    #def getSolutionComponents(self):
+    #    pass
 
-    @abc.abstractmethod
-    def sharePheromoneStructure(self, other):
-        pass
+    #@abc.abstractmethod
+    #def sharePheromoneStructure(self, other):
+    #    pass
 
-    @abc.abstractmethod
-    def getDeltaTau(self, component):
-        pass
+    #@abc.abstractmethod
+    #def getDeltaTau(self, component):
+    #    pass
 
     @abc.abstractmethod
     def makeLeader(self):
         pass
 
-    @abc.abstractmethod
-    def isLeader(self):
-        pass
+    #@abc.abstractmethod
+    #def isLeader(self):
+    #    pass
 
-    @abc.abstractmethod
-    def pheromoneDecay(self):
-        pass
+    #@abc.abstractmethod
+    #def pheromoneDecay(self):
+    #    pass
 
 class ConcreteAnt(Ant, PheromoneDict):
     def __init__(self, alpha = dp.alpha, beta = dp.beta, rho = dp.rho, Q = dp.Q, tau0 = dp.tau0, **kwargs):
@@ -131,7 +131,7 @@ class ConcreteAnt(Ant, PheromoneDict):
         return self.Q
 
     def getTau0(self):
-        return self.Tau0
+        return self.tau0
 
     def setIterBest(self, iterBest):
         self.iterBest = iterBest
@@ -151,9 +151,9 @@ class ConcreteAnt(Ant, PheromoneDict):
     def makeLeader(self):
         self.leader = True
 
-    @abc.abstractmethod
-    def getCurrentTau(self):
-        pass
+    #@abc.abstractmethod
+    #def getCurrentTau(self):
+    #    pass
 
 class AS_Ant(ConcreteAnt, AS_Decision, AllUpdate):
     pass
@@ -167,10 +167,10 @@ class ACS_Ant(ConcreteAnt, ACS_Decision, IterBestUpdate):
     def getq0(self):
         return self.q0
 
-class MMAS_Ant(ConcreteAnt, MMAS_Decision, MMASBestUpdate):
+class MMAS_Ant(ConcreteAnt, MMAS_Decision, MMASIterBestUpdate):
     def __init__(self, minPheromone = dp.minPheromone, maxPheromone = dp.maxPheromone, **kwargs):
         self.minPheromone = minPheromone
-        self.max = maxPheromone
+        self.maxPheromone = maxPheromone
 
         super().__init__(**kwargs)
 

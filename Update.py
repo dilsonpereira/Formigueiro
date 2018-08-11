@@ -75,9 +75,9 @@ class GlobalBestUpdate(Update, CooperativeConstructor):
     def getDeltaTau(self, component):
         return self.getQ()/self.getGlobalBest().getSolutionValue()
 
-class MMASBestUpdate(IterBestUpdate):
+class MMASIterBestUpdate(IterBestUpdate):
     def getDeltaTau(self, component):
-        return self.getRho()*self.getQ()/self.getGlobalBest().getSolutionValue()
+        return self.getRho()*self.getQ()/self.getIterBest().getSolutionValue()
 
     @abc.abstractmethod
     def getRho(self):
@@ -87,10 +87,10 @@ class MMASBestUpdate(IterBestUpdate):
         super().updatePheromones()
 
         if self.canUpdatePheromone():
-            p = self.getPheromoneValue(component)
-            p = max(p, self.getMinPheromone())
-            p = min(p, self.getMaxPheromone())
             for component in self.getSolutionComponents():
+                p = self.getPheromoneValue(component)
+                p = max(p, self.getMinPheromone())
+                p = min(p, self.getMaxPheromone())
                 self.setPheromoneValue(component, p)
 
     @abc.abstractmethod
