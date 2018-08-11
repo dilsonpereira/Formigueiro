@@ -71,13 +71,13 @@ class TSPInstance():
 ```
 In the above implementation, vertices are randomly chosen points in a 100x100 plane. Edge weights are the Euclidean distances between the vertices.
 
-To use the framework, we have to subclass an ant class corresponding to our desired ACO variation:
+To use the framework, we have to define a user class subclassing an ant class corresponding to our desired ACO variation:
 
 * `AS_Ant` for Ant System.
 * `ACS_Ant` for Ant Colony System.
 *  `MMAS_Ant` for Min-Max Ant System
 
-In addition, in the constructor of our class, in addition to our parameters, we **must** receive a dictionary of keyword parameters of the form `**kwargs` and make a call to `super().__init__(**kwargs)`
+**If we choose to define a constructor in our user class**, in addition to user parameters, we **must** receive a dictionary of keyword parameters of the form `**kwargs` and make a call to `super().__init__(**kwargs)`
 
 ```python
 class TSPAnt(Formigueiro.ACS_Ant):
@@ -87,9 +87,9 @@ class TSPAnt(Formigueiro.ACS_Ant):
         super().__init__(**kwargs)
 ```
 
-In the example above, we subclass `ACS_Ant` and the constructor of our subclass receives the problem instance.
+In the example above, we subclass `ACS_Ant` and the constructor of our user class receives the problem instance.
 
-We will now implement the method responsible for building solutions, the constructive heuristic. In our implementation, components will be tuples of the form `(u, v)`, representing edges. In Formigueiro, **every component must be hashable**. Every time a component has to be selected, we must call `makeDecision`, passing an iterable with the possible choices. `makeDecision` will return the selected component.
+The method `constructSolution` is where solutions should be built. In the example, components will be tuples of the form `(u, v)`, representing edges. In Formigueiro, **every component must be hashable**. Every time a component has to be selected, we must call `makeDecision`, passing an iterable with the possible choices. `makeDecision` will return the selected component.
 
 ```python
     def constructSolution(self):
@@ -161,12 +161,11 @@ class TSPAnt(Formigueiro.ACS_Ant):
         self.makeDecision([(u, 0)])
 ```
 
-Finally, to solve the problem, we call `Solve`, passing our class as an argument, together with arguments for Formigueiro and arguments for our class itself. Solve will return the objective value and the components in the best solution found:
+Finally, to solve the problem, we call `Solve`, passing the user class as an argument, together with arguments for Formigueiro and arguments for the user class itself. `Solve` will return the objective value and the components in the best solution found:
 
 ```python
-if __name__ == '__main__':
-    instance = TSPInstance(50)
-    obj, components = Formigueiro.Solve(antCls = TSPAnt, instance = instance, numIterations = 1000, numAnts = 10, alpha = 1, beta = 1) 
+instance = TSPInstance(50)
+obj, components = Formigueiro.Solve(antCls = TSPAnt, instance = instance, numIterations = 1000, numAnts = 10, alpha = 1, beta = 1) 
 ```
 
 The following are the parameters that can be passed to `Solve`:
@@ -187,4 +186,4 @@ numIterations |number of iterations| 100
 
 
 ## Support for Local Search
-Local Search is supported. The user must implement the method `localSearch` in its class. In addition, the `getSolutionComponents` method must be implemented. It should return an iterable with the components in the solution after local search.
+Local Search is supported. The user must implement the method `localSearch` in the user class. If local search is implemented, the `getSolutionComponents` method must also be implemented. It should return an iterable with the components in the solution after local search.
