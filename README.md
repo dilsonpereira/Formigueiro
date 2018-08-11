@@ -182,9 +182,8 @@ q0 |q<sub>0</sub>| 0.5
 phi |&phi;| 0.9
 minPheromone |min. amount of pheromone in MMAS| -&#x221e;
 maxPheromone |max. amount of pheromone in MMAS| &#x221e;
-
-numAnts = 10
-numIterations = 100
+numAnts |number of ants| 10
+numIterations |number of iterations| 100
 
 
 ## Support for Local Search
