@@ -77,9 +77,9 @@ class Ant(abc.ABC):
     def getIterBest(self):
         pass
 
-    #@abc.abstractmethod
-    #def getSolutionValue(self):
-    #    pass
+    @abc.abstractmethod
+    def getSolutionValue(self):
+        pass
 
     #@abc.abstractmethod
     #def getSolutionComponents(self):
@@ -155,17 +155,24 @@ class ConcreteAnt(Ant, PheromoneDict):
     #def getCurrentTau(self):
     #    pass
 
+    def getSolutionValue(self):
+        return sum(self.getComponentCost(c) for c in self.getSolutionComponents())
+
 class AS_Ant(ConcreteAnt, AS_Decision, AllUpdate):
     pass
 
-class ACS_Ant(ConcreteAnt, ACS_Decision, IterBestUpdate):
-    def __init__(self, q0 = dp.q0, **kwargs):
+class ACS_Ant(ConcreteAnt, ACS_Decision, ACSIterBestUpdate):
+    def __init__(self, phi = dp.phi, q0 = dp.q0, **kwargs):
         self.q0 = q0
+        self.phi = phi
 
         super().__init__(**kwargs)
 
     def getq0(self):
         return self.q0
+
+    def getPhi(self):
+        return self.phi
 
 class MMAS_Ant(ConcreteAnt, MMAS_Decision, MMASIterBestUpdate):
     def __init__(self, minPheromone = dp.minPheromone, maxPheromone = dp.maxPheromone, **kwargs):

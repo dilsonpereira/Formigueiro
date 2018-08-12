@@ -2,13 +2,9 @@ import abc
 from .CooperativeConstructor import CooperativeConstructor
 
 class Update(abc.ABC):
+    @abc.abstractmethod
     def updatePheromones(self):
-        if self.isLeader():
-            self.pheromoneDecay()
-
-        if self.canUpdatePheromone():
-            for component in self.getSolutionComponents():
-                self.setPheromoneValue(component, self.getPheromoneValue(component) + self.getDeltaTau(component))
+        pass
 
     @abc.abstractmethod
     def setPheromoneValue(self, component, value):
@@ -46,25 +42,31 @@ class Update(abc.ABC):
     def canUpdatePheromone(self):
         pass
 
-class AllUpdate(Update, CooperativeConstructor):
+class TypicalUpdate(abc.ABC):
+    def updatePheromones(self):
+        if self.isLeader():
+            self.pheromoneDecay()
+
+        if self.canUpdatePheromone():
+            for component in self.getSolutionComponents():
+                self.setPheromoneValue(component, self.getPheromoneValue(component) + self.getQ()*self.getDeltaTau(component))
+
+    def getDeltaTau(self, component):
+        return 1/self.getSolutionValue()
+
+class AllUpdate(TypicalUpdate, CooperativeConstructor):
     def canUpdatePheromone(self):
         return True
 
-    def getDeltaTau(self, component):
-        return self.getQ()/self.getSolutionValue()
-
-class IterBestUpdate(Update, CooperativeConstructor):
+class IterBestUpdate(TypicalUpdate, CooperativeConstructor):
     def canUpdatePheromone(self):
         return self == self.getIterBest()
-
-    def getDeltaTau(self, component):
-        return self.getQ()/self.getIterBest().getSolutionValue()
 
     @abc.abstractmethod
     def getIterBest(self):
         pass
 
-class GlobalBestUpdate(Update, CooperativeConstructor):
+class GlobalBestUpdate(TypicalUpdate, CooperativeConstructor):
     def canUpdatePheromone(self):
         return self == self.getGlobalBest()
 
@@ -72,25 +74,31 @@ class GlobalBestUpdate(Update, CooperativeConstructor):
     def getGlobalBest(self):
         pass
 
-    def getDeltaTau(self, component):
-        return self.getQ()/self.getGlobalBest().getSolutionValue()
-
-class MMASIterBestUpdate(IterBestUpdate):
-    def getDeltaTau(self, component):
-        return self.getRho()*self.getQ()/self.getIterBest().getSolutionValue()
+class ACSUpdate(TypicalUpdate):
+    def updatePheromones(self):
+        if self.canUpdatePheromone():
+            for component in self.getSolutionComponents():
+                rho = self.getRho()
+                tau = self.getPheromoneValue(component)
+                delta = self.getDeltaTau(component)
+                Q = self.getQ()
+                self.setPheromoneValue(component, (1-rho)*tau + rho*Q*delta)
 
     @abc.abstractmethod
     def getRho(self):
         pass
 
+class ACSIterBestUpdate(ACSUpdate, IterBestUpdate):
+    pass
+
+class MMASUpdate(TypicalUpdate):
     def updatePheromones(self):
         super().updatePheromones()
 
         if self.canUpdatePheromone():
             for component in self.getSolutionComponents():
                 p = self.getPheromoneValue(component)
-                p = max(p, self.getMinPheromone())
-                p = min(p, self.getMaxPheromone())
+                p = min(max(p, self.getMinPheromone()), self.getMaxPheromone())
                 self.setPheromoneValue(component, p)
 
     @abc.abstractmethod
@@ -100,4 +108,7 @@ class MMASIterBestUpdate(IterBestUpdate):
     @abc.abstractmethod
     def getMaxPheromone(self):
         pass
+
+class MMASIterBestUpdate(MMASUpdate, IterBestUpdate):
+    pass
 

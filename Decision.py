@@ -26,8 +26,9 @@ class Decision(abc.ABC):
     def getComponentCost(self, component):
         pass
 
-    def getNumerator(self, component):
-        return self.getPheromoneValue(component)**self.getAlpha() * self.getHeuristicValue(component)**self.getBeta()
+    @abc.abstractmethod
+    def getSolutionComponents(self):
+        pass
 
 class DecisionComponentRecording(Decision):
     def __init__(self, **kwargs):
@@ -53,11 +54,11 @@ class DecisionComponentRecording(Decision):
             if s > r:
                 return c
 
-    def getSolutionValue(self):
-        return sum(self.getComponentCost(c) for c in self.getSolutionComponents())
-
     def getHeuristicValue(self, component):
         return 1/self.getComponentCost(component)
+
+    def getNumerator(self, component):
+        return self.getPheromoneValue(component)**self.getAlpha() * self.getHeuristicValue(component)**self.getBeta()
 
 class AS_Decision(DecisionComponentRecording):
     def makeDecision(self, components):
@@ -68,14 +69,6 @@ class AS_Decision(DecisionComponentRecording):
 MMAS_Decision = AS_Decision
 
 class ACS_Decision(DecisionComponentRecording):
-    def __init__(self, phi = dp.phi, **kwargs):
-        self.phi = phi
-
-        super().__init__(**kwargs)
-
-    def getPhi(self):
-        return self.phi
-
     def deterministicFactor(self, component):
         return self.getPheromoneValue(component)*self.getHeuristicValue(component)**self.getBeta()
 
@@ -105,4 +98,9 @@ class ACS_Decision(DecisionComponentRecording):
     @abc.abstractmethod
     def getq0(self):
         pass
+
+    @abc.abstractmethod
+    def getPhi(self):
+        pass
+
 
