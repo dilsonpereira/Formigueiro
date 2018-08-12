@@ -26,6 +26,10 @@ class Pheromone(abc.ABC):
     def getTau0(self):
         pass
 
+    @abc.abstractmethod
+    def getComponents(self):
+        pass
+
 class PheromoneDict(Pheromone):
     def __init__(self, **kwargs):
         self.P = collections.defaultdict(self.getCurrentTau)
@@ -49,4 +53,5 @@ class PheromoneDict(Pheromone):
         for component in self.P:
             self.P[component] *= (1-self.getRho())
 
-
+    def getComponents(self):
+        return (c for c in self.P)

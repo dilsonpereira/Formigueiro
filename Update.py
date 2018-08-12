@@ -46,7 +46,7 @@ class TypicalUpdate(abc.ABC):
     def updatePheromones(self):
         if self.isLeader():
             self.pheromoneDecay()
-
+            
         if self.canUpdatePheromone():
             for component in self.getSolutionComponents():
                 self.setPheromoneValue(component, self.getPheromoneValue(component) + self.getQ()*self.getDeltaTau(component))
@@ -95,8 +95,8 @@ class MMASUpdate(TypicalUpdate):
     def updatePheromones(self):
         super().updatePheromones()
 
-        if self.canUpdatePheromone():
-            for component in self.getSolutionComponents():
+        if self.isLeader():
+            for component in self.getComponents():
                 p = self.getPheromoneValue(component)
                 p = min(max(p, self.getMinPheromone()), self.getMaxPheromone())
                 self.setPheromoneValue(component, p)
