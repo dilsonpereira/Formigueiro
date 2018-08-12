@@ -2,13 +2,14 @@ from . import DefaultParameters as dp
 
 def Solve(antCls, numIterations = dp.numIterations, numAnts = dp.numAnts, **kwargs):
     try:
+        fa = antCls(**kwargs)
         globalBest = None
         for k in range(numIterations):
             ants = [antCls(**kwargs) for _ in range(numAnts)]
             ants[0].makeLeader()
 
             for ant in ants:
-                ants[0].sharePheromoneStructure(ant)
+                fa.sharePheromoneStructure(ant)
                 ant.constructSolution()
                 ant.localSearch()
 
