@@ -5,22 +5,21 @@ Formigueiro is a framework for transforming user provided constructive heuristic
 ## A Quick Introduction to Ant Colony Optimization
 
 ### Combinatorial Optimization
-In Combinatorial Optimization problems, possible (or feasible) solutions are made up of components. Combinations of components that satisfy the problem constraints (that "make sense" as solutions) are feasible solutions.
-Finding optimal solutions, feasible combinations of components that minimize an objective function, is often hard.
-
+In Combinatorial Optimization problems, possible (or feasible) solutions are made up of **components**. Combinations of components that satisfy the problem constraints (that "make sense" as solutions) are called feasible solutions.
+Finding optimal solutions (feasible combinations of components that minimize an objective function) is often hard.
 
 ### Constructive Heuristics
 Constructive heuristics build solutions by iteratively adding components to an initially empty set. At each step, they employ some criterion to select one from a set of components whose selection can potentially lead to a feasible solution.
 
 ### Ant Colony Optimization
-In nature, ants cooperate at finding resources by depositing pheromone along their traveled paths. Ant Colony Optimization is metaheuristic inspired by this behavior.
+In nature, ants cooperate in finding resources by depositing pheromone along their traveled paths. Ant Colony Optimization is a metaheuristic inspired by this behavior.
 
-Ants are responsible for applying a constructive algorithm to build solutions. After the solution is built, they might deposit pheromone over the components they employed. The amount of pheromone depends on the quality of the solution they found.
+Ants are responsible for applying a constructive algorithm to build solutions. After the solution is built, they might deposit pheromone on the components they employed. The amount of pheromone depends on the quality of the solution they found.
 
 During the construction phase, the next component to be added to the solution is selected probabilistically. The probability p<sub>c</sub> for the selection of a component c takes into account the amount of pheromone &tau;<sub>c</sub> deposited on that component by all the ants as well as a measure &eta;<sub>c</sub> of the cost of employing that component on a solution. 
 
 Let C be the set of components available to be selected at the current iteration. Let A be the set of ants.
-In Ant System, one of the most basic ACO variations, the following formula for the probability of selecting component c is used:
+In Ant System (one of the most basic ACO variations) the following formula for the probability of selecting component c is used:
 
 p<sub>c</sub> = &tau;<sub>c</sub><sup>&alpha;</sup>&eta;<sub>c</sub><sup>&beta;</sup>/&Sigma;<sub>c'&isin;C</sub>&tau;<sub>c'</sub><sup>&alpha;</sup>&eta;<sub>c'</sub><sup>&beta;</sup>
 
@@ -28,7 +27,7 @@ After the construction and an optional local search phase, pheromones are then u
 
 &tau;<sub>c</sub> &larr; (1-&rho;)&tau;<sub>c</sub> + &Sigma;<sub>a&isin;A</sub>&Delta;&tau;<sub>c</sub><sup>a</sup>, 
 
-where &Delta;&tau;<sub>c</sub><sup>a</sup> = Q/f(a) if c is used by ant a, &Delta;&tau;<sub>c</sub><sup>a</sup> = 0 otherwise, and f(a) is the objective value of the solution built by ant a.
+where &Delta;&tau;<sub>c</sub><sup>a</sup> = Q/f(a) if c is used by ant a, 0 otherwise; and f(a) is the objective value of the solution built by ant a.
 
 &alpha;, &beta;, &rho;, and Q are algorithm parameters.
 
@@ -45,12 +44,11 @@ Explained above.
 * Pheromone values are updated only by global or iteration best ants.
 * Local pheromone updates: Ants update component pheromones as soon as they are selected:
 &tau;<sub>c</sub> &larr; (1-&phi;)&tau;<sub>c</sub> + &phi;&tau;<sub>0</sub>. The initial amount of pheromone on each component is &tau;<sub>0</sub> and &phi; is an algorithm parameter.
-
 * Pseudorandom proportional rule: In order to select the next component, an ant draws a random number q &isin; [0, 1]. If q &le; q<sub>0</sub>, where q<sub>0</sub> is an algorithm parameter, the next component will be the one that maximizes &tau;<sub>c</sub>&eta;<sub>c</sub><sup>&beta;</sup>. Else, the classic rule is applied.
 
 ## How to Use the Framework
 
-In short, we implement a constructive heuristic and every time a component has to be chosen we call a special method to take the decision for us, passing the possible choices as an argument.
+In short, we implement a constructive heuristic that calls a special method every time a component has to be chosen, possible choices are passed as arguments.
 
 As an example, lets consider the Traveling Salesman Problem (TSP).
 
@@ -186,4 +184,4 @@ numIterations |number of iterations| 100
 
 
 ## Support for Local Search
-Local Search is supported. The user must implement the method `localSearch` in the user class. If local search is implemented, the `getSolutionComponents` method must also be implemented. It should return an iterable with the components in the solution after local search.
+Local Search is supported. The user must implement the `localSearch` method in the user class. If local search is implemented, the `getSolutionComponents` method must also be implemented. It should return an iterable with the components in the solution after local search.
