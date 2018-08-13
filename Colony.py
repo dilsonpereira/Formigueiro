@@ -16,7 +16,7 @@ def Solve(antCls, numIterations = dp.numIterations, numAnts = dp.numAnts, **kwar
             iterBest = min(ants, key = lambda a: a.getSolutionValue())
             if globalBest==None or iterBest.getSolutionValue() < globalBest.getSolutionValue():
                 globalBest = iterBest 
-            print(iterBest.getSolutionValue(), globalBest.getSolutionValue(), max(a.getSolutionValue() for a in ants))
+            #print(iterBest.getSolutionValue(), globalBest.getSolutionValue(), max(a.getSolutionValue() for a in ants))
 
             for ant in set(ants + [iterBest, globalBest]):
                 ant.setIterBest(iterBest)
