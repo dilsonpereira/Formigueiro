@@ -1,6 +1,6 @@
 # Formigueiro - A python Framework for Simple Ant Colony Optimization Algorithms
 
-Formigueiro is a framework for transforming user provided constructive heuristics into Ant Colony Optimization (ACO) algorithms.
+Formigueiro is a framework that transforms user provided constructive heuristics into Ant Colony Optimization (ACO) algorithms.
 
 ## A Quick Introduction to Ant Colony Optimization
 
