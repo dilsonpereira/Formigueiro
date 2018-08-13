@@ -5,7 +5,7 @@ Formigueiro is a framework that transforms user provided constructive heuristics
 ## A Quick Introduction to Ant Colony Optimization
 
 ### Combinatorial Optimization
-In Combinatorial Optimization problems, possible (or feasible) solutions are made up of **components**. Combinations of components that satisfy the problem constraints (that "make sense" as solutions) are called feasible solutions.
+In Combinatorial Optimization problems, possible (or feasible) solutions are made up of *components*. Combinations of components that satisfy the problem constraints (that "make sense" as solutions) are called feasible solutions.
 Finding optimal solutions (feasible combinations of components that minimize an objective function) is often hard.
 
 ### Constructive Heuristics
