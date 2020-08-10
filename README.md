@@ -1,11 +1,11 @@
 # Formigueiro - A python Framework for Simple Ant Colony Optimization Algorithms
 
-Formigueiro is a framework for transforming user provided constructive heuristics into Ant Colony Optimization (ACO) algorithms.
+Formigueiro is a framework that transforms user provided constructive heuristics into Ant Colony Optimization (ACO) algorithms.
 
 ## A Quick Introduction to Ant Colony Optimization
 
 ### Combinatorial Optimization
-In Combinatorial Optimization problems, possible (or feasible) solutions are made up of **components**. Combinations of components that satisfy the problem constraints (that "make sense" as solutions) are called feasible solutions.
+In Combinatorial Optimization problems, possible (or feasible) solutions are made up of *components*. Combinations of components that satisfy the problem constraints (that "make sense" as solutions) are called feasible solutions.
 Finding optimal solutions (feasible combinations of components that minimize an objective function) is often hard.
 
 ### Constructive Heuristics
