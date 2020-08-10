@@ -42,7 +42,7 @@ class Update(abc.ABC):
     def canUpdatePheromone(self):
         pass
 
-class TypicalUpdate(abc.ABC):
+class TypicalUpdate(Update):
     def updatePheromones(self):
         if self.isLeader():
             self.pheromoneDecay()
